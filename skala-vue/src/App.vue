@@ -1,27 +1,40 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import SampleOne from './components/SampleOne.vue';
-import SampleTwo from './components/SampleTwo.vue';
+import VueBind from './components/codeChallenges/VueBind.vue';
+import VueBindClass from './components/codeChallenges/VueBindClass.vue';
+import VueBindShorthand from './components/codeChallenges/VueBindShorthand.vue';
+import VueBindStyle from './components/codeChallenges/VueBindStyle.vue';
+import VueCloak from './components/codeChallenges/VueCloak.vue';
+import VueFor from './components/codeChallenges/VueFor.vue';
+import VueHtml from './components/codeChallenges/VueHtml.vue';
+import VueHtmlXss from './components/codeChallenges/VueHtmlXss.vue';
+import VueIf from './components/codeChallenges/VueIf.vue';
+import VueMemo from './components/codeChallenges/VueMemo.vue';
+import VueOnce from './components/codeChallenges/VueOnce.vue';
+import VuePre from './components/codeChallenges/VuePre.vue';
+import VueShow from './components/codeChallenges/VueShow.vue';
+import VueText from './components/codeChallenges/VueText.vue';
 </script>
 
 <template>
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <VueHtml></VueHtml>
+  <VueHtmlXss></VueHtmlXss>
+  <VueText></VueText>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <VueBind></VueBind>
+  <VueBindClass></VueBindClass>
+  <VueBindStyle></VueBindStyle>
+  <VueBindShorthand></VueBindShorthand>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+  <VueIf></VueIf>
 
-  <RouterView /> -->
-  <SampleOne></SampleOne>
-  <SampleTwo></SampleTwo>
+  <VueShow></VueShow>
+
+  <VueFor></VueFor>
+
+  <VuePre></VuePre>
+  <VueCloak></VueCloak>
+  <VueOnce></VueOnce>
+  <VueMemo></VueMemo>
 </template>
 
 <style scoped>
