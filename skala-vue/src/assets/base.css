@@ -32,6 +32,8 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+  --color-text-muted: rgba(60, 60, 60, 0.66);
+  --color-accent: #42b883;
 
   --section-gap: 160px;
 }
@@ -47,6 +49,8 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+    --color-text-muted: var(--vt-c-text-dark-2);
+    --color-accent: #42d392;
   }
 }
 
@@ -83,4 +87,11 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
