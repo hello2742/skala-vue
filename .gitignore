@@ -1,1 +1,44 @@
 skala-vue-skeleton/
+
+# Dependencies
+node_modules/
+
+# Build and test output
+dist/
+dist-ssr/
+coverage/
+*.local
+__screenshots__/
+cypress/videos/
+cypress/screenshots/
+
+# Logs and debug files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Tool caches
+.eslintcache
+*.tsbuildinfo
+*.timestamp-*-*.mjs
+
+# Editor files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# macOS
+.DS_Store
