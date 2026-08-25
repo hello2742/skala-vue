@@ -12,6 +12,7 @@ const { searchKeyword, selectedMessage, filteredWeatherList, searchCity, selectC
         <p class="dashboard-kicker">TODAY'S WEATHER</p>
         <h2>지역별 날씨 현황</h2>
       </div>
+      <!-- [요구사항 3] :value와 @input을 사용한 한글 도시 검색 input입니다. -->
       <label class="search-box">
         <span class="sr-only">도시 검색</span>
         <span aria-hidden="true">⌕</span>
@@ -24,6 +25,7 @@ const { searchKeyword, selectedMessage, filteredWeatherList, searchCity, selectC
       {{ selectedMessage }}
     </div>
 
+    <!-- [요구사항 1] 날씨 배열을 v-for로 반복 출력하고 id를 :key로 사용합니다. -->
     <div v-if="filteredWeatherList.length" class="weather-grid">
       <WeatherCard
         v-for="city in filteredWeatherList"

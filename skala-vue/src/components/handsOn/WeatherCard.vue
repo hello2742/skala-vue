@@ -10,6 +10,7 @@ const emit = defineEmits(['select', 'show-detail'])
 </script>
 
 <template>
+  <!-- [요구사항 4] 카드 전체 클릭 이벤트: 부모 Dashboard로 선택 도시를 전달합니다. -->
   <article class="weather-card" @click="emit('select', city.name)">
     <div class="weather-card-topline">
       <span class="weather-city">{{ city.name }}</span>
@@ -21,7 +22,9 @@ const emit = defineEmits(['select', 'show-detail'])
       <span>{{ city.status }}</span>
     </div>
 
+    <!-- [요구사항 2] 기온이 25도 이상이면 더움 라벨을 표시합니다. -->
     <p v-if="city.temp >= 25" class="temperature-label hot">🔥 더움 (25도 이상)</p>
+    <!-- [요구사항 2] 기온이 25도 미만이면 선선함 라벨을 표시합니다. -->
     <p v-else class="temperature-label cool">❄️ 선선함 (25도 미만)</p>
 
     <div class="weather-stats">
@@ -29,6 +32,7 @@ const emit = defineEmits(['select', 'show-detail'])
       <span>바람 {{ city.wind }}m/s</span>
     </div>
 
+    <!-- [요구사항 4] .stop으로 카드 클릭 이벤트 버블링을 막습니다. -->
     <button class="detail-button" type="button" @click.stop="emit('show-detail', city.name, city.status)">
       상세보기
     </button>
