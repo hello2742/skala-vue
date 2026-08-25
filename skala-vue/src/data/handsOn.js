@@ -1,10 +1,13 @@
-// 핸즈온 컴포넌트를 만들 때 이 배열에 화면 정보를 추가합니다.
-// 예시:
-// {
-//   day: 1,
-//   slug: 'todo-app',
-//   title: 'Todo App',
-//   description: 'Vue로 만드는 Todo 앱',
-//   component: TodoApp,
-// }
-export const handsOn = []
+import WeatherDashboard from '../components/handsOn/WeatherDashboard.vue'
+import WeatherHandsOnView from '../views/WeatherHandsOnView.vue'
+
+export const handsOn = [
+  {
+    day: 1,
+    slug: 'weather-dashboard',
+    title: '지역별 날씨 현황',
+    description: 'v-for, v-if, 검색 바인딩, 이벤트 수식어를 활용한 날씨 대시보드입니다.',
+    component: WeatherDashboard,
+    view: WeatherHandsOnView,
+  },
+]

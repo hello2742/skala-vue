@@ -15,7 +15,7 @@ const challengeRoutes = challenges.map((challenge) => ({
 const handsOnRoutes = handsOn.map((item) => ({
   path: `/hands-on/${item.slug}`,
   name: `hands-on-${item.slug}`,
-  component: HandsOnView,
+  component: item.view ?? HandsOnView,
   meta: { handsOn: item },
 }))
 
