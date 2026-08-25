@@ -1,4 +1,7 @@
 <script setup>
+import EventBasic from './components/codeChallenges/EventBasic.vue';
+import EventModifier from './components/codeChallenges/EventModifier.vue';
+import EventObject from './components/codeChallenges/EventObject.vue';
 import VueBind from './components/codeChallenges/VueBind.vue';
 import VueBindClass from './components/codeChallenges/VueBindClass.vue';
 import VueBindShorthand from './components/codeChallenges/VueBindShorthand.vue';
@@ -16,7 +19,8 @@ import VueText from './components/codeChallenges/VueText.vue';
 </script>
 
 <template>
-  <VueHtml></VueHtml>
+  <!-- 1일 차 -->
+  <!-- <VueHtml></VueHtml>
   <VueHtmlXss></VueHtmlXss>
   <VueText></VueText>
 
@@ -34,7 +38,12 @@ import VueText from './components/codeChallenges/VueText.vue';
   <VuePre></VuePre>
   <VueCloak></VueCloak>
   <VueOnce></VueOnce>
-  <VueMemo></VueMemo>
+  <VueMemo></VueMemo> -->
+
+  <EventBasic></EventBasic>
+  <EventObject></EventObject>
+  <EventModifier></EventModifier>
+  
 </template>
 
 <style scoped>
