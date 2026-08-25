@@ -2,6 +2,9 @@
 import EventBasic from './components/codeChallenges/EventBasic.vue';
 import EventModifier from './components/codeChallenges/EventModifier.vue';
 import EventObject from './components/codeChallenges/EventObject.vue';
+import ModelBasic from './components/codeChallenges/ModelBasic.vue';
+import ModelForm from './components/codeChallenges/ModelForm.vue';
+import ModelModifier from './components/codeChallenges/ModelModifier.vue';
 import VueBind from './components/codeChallenges/VueBind.vue';
 import VueBindClass from './components/codeChallenges/VueBindClass.vue';
 import VueBindShorthand from './components/codeChallenges/VueBindShorthand.vue';
@@ -40,10 +43,13 @@ import VueText from './components/codeChallenges/VueText.vue';
   <VueOnce></VueOnce>
   <VueMemo></VueMemo> -->
 
-  <EventBasic></EventBasic>
+  <!-- <EventBasic></EventBasic>
   <EventObject></EventObject>
-  <EventModifier></EventModifier>
+  <EventModifier></EventModifier> -->
   
+  <ModelBasic></ModelBasic>
+  <ModelForm></ModelForm>
+  <ModelModifier></ModelModifier>
 </template>
 
 <style scoped>
