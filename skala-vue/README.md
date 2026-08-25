@@ -31,8 +31,30 @@ Vue 과제 컴포넌트를 하루 단위로 기록하는 프로젝트입니다.
 
 - 화면을 `WeatherHandsOnView`와 `WeatherDashboard`로 분리해 페이지 레이아웃과 기능 UI의 책임을 나눴습니다.
 - 날씨 상태와 검색·선택·상세보기 로직은 `useWeather` composable로 분리하고, `WeatherCard`는 화면 표현과 이벤트 전달에 집중하도록 구성했습니다.
-- 습도, 풍속, 이모지, 검색 결과 없음 상태, 반응형 카드 레이아웃을 추가했습니다.
+- 습도, 풍속, 이모지, 체감온도, 미세먼지, 추천 활동, 검색 결과 없음 상태, 반응형 카드 레이아웃을 추가했습니다.
 - 이후 핸즈온도 같은 구조로 확장할 수 있도록 공통 핸즈온 라우팅과 카드 목록 구조를 유지했습니다.
+
+## 핸즈온 02. 날씨 검색 상태 실험실
+
+### 구현 내용
+
+- `searchQuery`, `selectedCityInfo`, `weatherList`를 `ref`로 정의했습니다.
+- 도시 이름을 기준으로 검색 결과를 `filteredWeatherList` computed에 담았습니다.
+- 검색어가 비어 있으면 원본 날씨 목록을 출력하고, 검색 결과가 없으면 안내 문구를 출력합니다.
+- `watch`로 `selectedCityInfo` 변경을 감시하고 이전 도시와 새 도시를 콘솔에 기록합니다.
+- `watchEffect`로 검색어 입력 변화를 추적해 콘솔에 기록합니다.
+
+### 느낀 점
+
+`computed`는 화면에 보여줄 값을 계산하는 역할을 하고, `watch`와 `watchEffect`는 상태 변화가 발생했을 때 별도의 동작을 실행하는 역할이라는 차이를 확인했습니다. 특히 검색 결과 자체는 computed로 만들고, 검색어 변화 로그는 watchEffect로 분리하니 각각의 목적이 더 명확해졌습니다.
+
+### 나만의 독창성 및 강조 포인트
+
+- `showRecommendedOnly` 반응형 상태를 추가해 야외활동에 적합한 도시만 필터링할 수 있게 했습니다.
+- `recommendedCity` computed로 현재 날씨 데이터에서 오늘의 추천 도시를 자동으로 계산합니다.
+- 추천 필터 변화도 별도의 `watch`로 기록해 상태 감시의 확장 예시를 만들었습니다.
+- 1번 핸즈온의 목업 데이터와 `WeatherCard`를 재사용하고, 2번의 상태 관리와 watcher 로직만 별도 composable로 분리했습니다.
+- 공통 개발 규칙은 [handsOn-rules.md](./docs/handsOn-rules.md)에 정리했습니다.
 
 ## Recommended IDE Setup
 

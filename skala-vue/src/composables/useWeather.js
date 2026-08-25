@@ -1,15 +1,10 @@
 import { computed, ref } from 'vue'
-
-// [요구사항 1] v-for로 렌더링할 임의의 날씨 데이터 배열
-// 과제에서 제시한 도시 외에 제주, 습도, 풍속, 이모지 데이터를 추가했습니다.
-const weatherList = ref([
-  { id: 'city_01', name: '서울', temp: 28, status: '맑음', humidity: 55, wind: 2.1, emoji: '☀️' },
-  { id: 'city_02', name: '수원', temp: 24, status: '비', humidity: 78, wind: 1.6, emoji: '🌧️' },
-  { id: 'city_03', name: '부산', temp: 26, status: '구름', humidity: 68, wind: 3.4, emoji: '⛅' },
-  { id: 'city_04', name: '제주', temp: 30, status: '맑음', humidity: 62, wind: 4.0, emoji: '🌤️' },
-])
+import { weatherMockData } from '../data/weatherMock'
 
 export function useWeather() {
+  // [요구사항 1] v-for로 렌더링할 반응형 날씨 데이터 배열
+  const weatherList = ref(weatherMockData.map((city) => ({ ...city })))
+
   // [요구사항 3] 한글 도시 검색어와 검색 결과를 관리합니다.
   const searchKeyword = ref('')
   const selectedMessage = ref('지역 카드를 눌러 선택해 보세요.')

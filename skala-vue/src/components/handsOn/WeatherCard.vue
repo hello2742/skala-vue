@@ -32,6 +32,15 @@ const emit = defineEmits(['select', 'show-detail'])
       <span>바람 {{ city.wind }}m/s</span>
     </div>
 
+    <!-- [요구사항 5] 나만의 목업 데이터인 체감온도와 미세먼지를 추가로 표시합니다. -->
+    <div class="weather-extra">
+      <span>체감 {{ city.feelsLike }}°</span>
+      <span>미세먼지 {{ city.airQuality }}</span>
+    </div>
+
+    <!-- [요구사항 5] 날씨 데이터에 따른 추천 활동을 보여주는 확장 Mockup입니다. -->
+    <p class="weather-recommendation">오늘의 추천: {{ city.recommendation }}</p>
+
     <!-- [요구사항 4] .stop으로 카드 클릭 이벤트 버블링을 막습니다. -->
     <button class="detail-button" type="button" @click.stop="emit('show-detail', city.name, city.status)">
       상세보기
@@ -66,6 +75,21 @@ const emit = defineEmits(['select', 'show-detail'])
   justify-content: space-between;
 }
 
+.weather-extra {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.6rem;
+  color: rgb(247 251 255 / 80%);
+  font-size: 0.73rem;
+}
+
+.weather-recommendation {
+  margin-bottom: 0.9rem;
+  color: #bcecff;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 .weather-city {
   font-size: 1.15rem;
   font-weight: 700;
@@ -95,6 +119,7 @@ const emit = defineEmits(['select', 'show-detail'])
 .temperature-label {
   width: fit-content;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   padding: 0.3rem 0.55rem;
   border-radius: 999px;
   font-size: 0.76rem;
