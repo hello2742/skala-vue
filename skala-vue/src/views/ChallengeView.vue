@@ -4,7 +4,13 @@ import { RouterLink, useRoute } from 'vue-router'
 
 const route = useRoute()
 const challenge = computed(() => route.meta.challenge)
-const challengeComponent = computed(() => challenge.value?.component)
+const challengeComponents = computed(() => {
+  if (challenge.value?.components) {
+    return challenge.value.components
+  }
+
+  return challenge.value?.component ? [challenge.value.component] : []
+})
 </script>
 
 <template>
@@ -19,7 +25,11 @@ const challengeComponent = computed(() => challenge.value?.component)
     </div>
 
     <section class="challenge-panel">
-      <component :is="challengeComponent" />
+      <component
+        v-for="(challengeComponent, index) in challengeComponents"
+        :key="`${challenge.slug}-${index}`"
+        :is="challengeComponent"
+      />
     </section>
   </main>
 

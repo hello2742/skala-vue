@@ -20,8 +20,10 @@ import VueOnce from '../components/codeChallenges/VueOnce.vue'
 import VuePre from '../components/codeChallenges/VuePre.vue'
 import VueShow from '../components/codeChallenges/VueShow.vue'
 import VueText from '../components/codeChallenges/VueText.vue'
-
+import LifecycleChild from '../components/codeChallenges/LifecycleChild.vue'
+import LifecycleParent from '../components/codeChallenges/LifecycleParent.vue'
 // 새 과제는 이 배열에 화면 정보와 컴포넌트를 추가합니다.
+// 한 챌린지에 여러 컴포넌트를 넣을 때는 component 대신 components 배열을 사용합니다.
 export const challenges = [
   { day: 1, category: 'Vue 기초', slug: 'sample-one', title: 'Vue 반응성 변수 기초', description: '일반 변수와 ref의 차이를 확인합니다.', component: SampleOne },
   { day: 1, category: 'Vue 기초', slug: 'sample-two', title: '템플릿 표현식 기초', description: '템플릿에서 문자열과 표현식을 출력합니다.', component: SampleTwo },
@@ -45,4 +47,12 @@ export const challenges = [
   { day: 2, category: '폼 입력', slug: 'model-basic', title: 'v-model 양방향 바인딩', description: 'v-model과 내부 동작 원리를 확인합니다.', component: ModelBasic },
   { day: 2, category: '폼 입력', slug: 'model-form', title: '폼 요소와 v-model', description: '여러 HTML Form 요소를 연결합니다.', component: ModelForm },
   { day: 2, category: '폼 입력', slug: 'model-modifier', title: 'v-model 수식어', description: 'lazy, number, trim 수식어를 확인합니다.', component: ModelModifier },
+  {
+    day: 3,
+    category: '컴포넌트',
+    slug: 'vue-life-cycle',
+    title: 'Vue life-cycle 알아보기',
+    description: 'Vue의 라이프 사이클을 알아봅시다.',
+    components: [LifecycleChild, LifecycleParent],
+  },
 ]
