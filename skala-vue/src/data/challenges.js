@@ -22,6 +22,7 @@ import VueShow from '../components/codeChallenges/VueShow.vue'
 import VueText from '../components/codeChallenges/VueText.vue'
 import LifecycleChild from '../components/codeChallenges/LifecycleChild.vue'
 import LifecycleParent from '../components/codeChallenges/LifecycleParent.vue'
+import PropsEmitsParent from '../components/codeChallenges/PropsEmitsParent.vue'
 // 새 과제는 이 배열에 화면 정보와 컴포넌트를 추가합니다.
 // 한 챌린지에 여러 컴포넌트를 넣을 때는 component 대신 components 배열을 사용합니다.
 export const challenges = [
@@ -54,5 +55,13 @@ export const challenges = [
     title: 'Vue life-cycle 알아보기',
     description: 'Vue의 라이프 사이클을 알아봅시다.',
     components: [LifecycleChild, LifecycleParent],
+  },
+  {
+    day: 3,
+    category: '컴포넌트',
+    slug: 'vue-props-emits',
+    title: 'Vue Props & Emits',
+    description: 'Props로 데이터를 전달하고 Emits로 자식 이벤트를 수신합니다.',
+    component: PropsEmitsParent,
   },
 ]
