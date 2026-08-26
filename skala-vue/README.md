@@ -78,6 +78,29 @@ Slot으로 자식 컴포넌트를 공통 카드 안에 주입하면서도 실제
 - WeatherSummary를 추가해 날씨 정보를 단순 카드 목록이 아닌 추천 대시보드 Mockup으로 확장했습니다.
 - 각 컴포넌트의 디자인을 `style scoped`로 분리했습니다.
 
+## 핸즈온 04. Vue Router 날씨 서비스
+
+### 구현 내용
+
+- `App.vue`에 `RouterLink` 내비게이션과 `RouterView` 메인 콘텐츠 영역을 구성했습니다.
+- `/`는 `WeatherHomeView`, `/about`은 `WeatherAboutView`, `/weather/:cityId`는 `WeatherDetailView`로 연결했습니다.
+- 상세보기 버튼의 `window.alert`를 제거하고 `router.push()`를 통한 Programmatic Navigation으로 변경했습니다.
+- `WeatherDetailView`는 `onMounted` 시 동적 `cityId`를 사용해 Mock Data에서 도시 정보를 찾습니다.
+- `WeatherInsightsView`를 추가해 평균 기온, 최고 기온 도시, 공기질 추천 정보를 계산합니다.
+- `NotFoundView`와 Catch-all Route를 추가하고, 주요 View에는 Lazy Loading을 적용했습니다.
+- 기존 핸즈온 아카이브는 `/archive`에서 계속 확인할 수 있습니다.
+
+### 느낀 점
+
+기존에는 하나의 화면 안에서 컴포넌트를 전환했지만, Vue Router를 적용하면서 URL이 화면의 상태와 역할을 표현하게 되었습니다. 특히 동적 경로의 `cityId`를 이용해 같은 상세 View가 여러 도시를 처리하는 방식이 인상적이었습니다.
+
+### 나만의 독창성 및 강조 포인트
+
+- 날씨 홈, 도시 상세, 인사이트 화면을 분리해 하나의 날씨 서비스처럼 구성했습니다.
+- 상세 페이지에 체감온도, 미세먼지, 추천 활동 등 기존 목업 데이터를 확장해 표시했습니다.
+- `/insights` 추가 View를 만들어 Mock Data를 computed로 가공한 요약 화면을 추가했습니다.
+- 잘못된 URL을 위한 404 화면과 기존 학습 아카이브 보존 경로까지 구성했습니다.
+
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
