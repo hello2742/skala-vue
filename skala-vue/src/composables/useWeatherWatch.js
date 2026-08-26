@@ -64,12 +64,12 @@ export function useWeatherWatch() {
     searchQuery.value = event.target.value
   }
 
-  const selectCity = (cityName) => {
-    selectedCityInfo.value = weatherList.value.find((city) => city.name === cityName) ?? null
+  const selectCity = (city) => {
+    selectedCityInfo.value = city
   }
 
-  const showDetail = (cityName, status) => {
-    window.alert(`${cityName}의 현재 날씨는 [${status}] 상태입니다.`)
+  const showDetail = (city) => {
+    window.alert(`${city.name}의 현재 날씨는 [${city.status}] 상태입니다.`)
   }
 
   return {

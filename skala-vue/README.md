@@ -56,6 +56,28 @@ Vue 과제 컴포넌트를 하루 단위로 기록하는 프로젝트입니다.
 - 1번 핸즈온의 목업 데이터와 `WeatherCard`를 재사용하고, 2번의 상태 관리와 watcher 로직만 별도 composable로 분리했습니다.
 - 공통 개발 규칙은 [handsOn-rules.md](./docs/handsOn-rules.md)에 정리했습니다.
 
+## 핸즈온 03. 컴포넌트로 분리한 날씨 대시보드
+
+### 구현 내용
+
+- `WeatherParent.vue`가 날씨 목록, 검색어, 선택 도시, computed, watcher와 이벤트 처리를 관리합니다.
+- `BaseDashboardCard.vue`는 공통 카드 디자인과 `<slot>` 영역을 제공합니다.
+- `SearchBar.vue`는 검색어를 props로 받고 `update-query` emits로 부모에게 전달합니다.
+- `WeatherCard.vue`는 도시 객체를 props로 받고 `select-card`, `click-detail` emits를 발생시킵니다.
+- 상세보기 버튼은 `.stop`으로 카드 선택 이벤트와 분리했습니다.
+- `WeatherSummary.vue`를 추가해 추천 도시, 체감온도, 미세먼지, 검색 결과 개수를 보여주는 Mockup을 구성했습니다.
+
+### 느낀 점
+
+Slot으로 자식 컴포넌트를 공통 카드 안에 주입하면서도 실제 props와 emits 통신은 부모 스코프에서 처리된다는 점을 확인했습니다. 화면 배치를 담당하는 BaseDashboardCard와 데이터 흐름을 담당하는 WeatherParent를 분리하니 각 컴포넌트의 책임이 더 명확해졌습니다.
+
+### 나만의 독창성 및 강조 포인트
+
+- 기존 날씨 기능을 유지하면서 검색 영역과 날씨 목록 영역을 공통 Slot 카드로 구성했습니다.
+- Props → 자식 표시, Emits → 부모 상태 변경의 단방향 데이터 흐름을 명확히 했습니다.
+- WeatherSummary를 추가해 날씨 정보를 단순 카드 목록이 아닌 추천 대시보드 Mockup으로 확장했습니다.
+- 각 컴포넌트의 디자인을 `style scoped`로 분리했습니다.
+
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).

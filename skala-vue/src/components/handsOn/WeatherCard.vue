@@ -1,48 +1,59 @@
 <script setup>
-defineProps({
+const props = defineProps({
   city: {
     type: Object,
     required: true,
   },
 })
 
-const emit = defineEmits(['select', 'show-detail'])
+// [Props] 부모가 전달한 선택 도시 객체를 카드로 표시합니다.
+const emit = defineEmits(['select-card', 'click-detail'])
+
+// [Emits] 카드 선택 시 도시 객체 전체를 부모에게 전달합니다.
+const selectCard = () => {
+  emit('select-card', props.city)
+}
+
+// [Emits] 상세보기 버튼 클릭 시 도시 객체를 부모에게 전달합니다.
+const clickDetail = () => {
+  emit('click-detail', props.city)
+}
 </script>
 
 <template>
-  <!-- [요구사항 4] 카드 전체 클릭 이벤트: 부모 Dashboard로 선택 도시를 전달합니다. -->
-  <article class="weather-card" @click="emit('select', city.name)">
+  <!-- [Emits] 카드 선택 이벤트를 부모 컴포넌트로 전달합니다. -->
+  <article class="weather-card" @click="selectCard">
     <div class="weather-card-topline">
-      <span class="weather-city">{{ city.name }}</span>
-      <span class="weather-icon" aria-hidden="true">{{ city.emoji }}</span>
+      <span class="weather-city">{{ props.city.name }}</span>
+      <span class="weather-icon" aria-hidden="true">{{ props.city.emoji }}</span>
     </div>
 
     <div class="weather-temperature">
-      <strong>{{ city.temp }}°</strong>
-      <span>{{ city.status }}</span>
+      <strong>{{ props.city.temp }}°</strong>
+      <span>{{ props.city.status }}</span>
     </div>
 
     <!-- [요구사항 2] 기온이 25도 이상이면 더움 라벨을 표시합니다. -->
-    <p v-if="city.temp >= 25" class="temperature-label hot">🔥 더움 (25도 이상)</p>
+    <p v-if="props.city.temp >= 25" class="temperature-label hot">🔥 더움 (25도 이상)</p>
     <!-- [요구사항 2] 기온이 25도 미만이면 선선함 라벨을 표시합니다. -->
     <p v-else class="temperature-label cool">❄️ 선선함 (25도 미만)</p>
 
     <div class="weather-stats">
-      <span>습도 {{ city.humidity }}%</span>
-      <span>바람 {{ city.wind }}m/s</span>
+      <span>습도 {{ props.city.humidity }}%</span>
+      <span>바람 {{ props.city.wind }}m/s</span>
     </div>
 
     <!-- [요구사항 5] 나만의 목업 데이터인 체감온도와 미세먼지를 추가로 표시합니다. -->
     <div class="weather-extra">
-      <span>체감 {{ city.feelsLike }}°</span>
-      <span>미세먼지 {{ city.airQuality }}</span>
+      <span>체감 {{ props.city.feelsLike }}°</span>
+      <span>미세먼지 {{ props.city.airQuality }}</span>
     </div>
 
     <!-- [요구사항 5] 날씨 데이터에 따른 추천 활동을 보여주는 확장 Mockup입니다. -->
-    <p class="weather-recommendation">오늘의 추천: {{ city.recommendation }}</p>
+    <p class="weather-recommendation">오늘의 추천: {{ props.city.recommendation }}</p>
 
-    <!-- [요구사항 4] .stop으로 카드 클릭 이벤트 버블링을 막습니다. -->
-    <button class="detail-button" type="button" @click.stop="emit('show-detail', city.name, city.status)">
+    <!-- [Emits] .stop으로 카드 선택 이벤트 버블링을 막고 상세 이벤트만 전달합니다. -->
+    <button class="detail-button" type="button" @click.stop="clickDetail">
       상세보기
     </button>
   </article>

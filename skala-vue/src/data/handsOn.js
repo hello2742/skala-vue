@@ -1,6 +1,8 @@
 import WeatherDashboard from '../components/handsOn/WeatherDashboard.vue'
+import WeatherParent from '../components/handsOn/WeatherParent.vue'
 import WeatherWatchDashboard from '../components/handsOn/WeatherWatchDashboard.vue'
 import WeatherHandsOnView from '../views/WeatherHandsOnView.vue'
+import WeatherComponentHandsOnView from '../views/WeatherComponentHandsOnView.vue'
 import WeatherWatchHandsOnView from '../views/WeatherWatchHandsOnView.vue'
 
 export const handsOn = [
@@ -19,5 +21,13 @@ export const handsOn = [
     description: 'computed, watch, watchEffect로 날씨 검색 상태의 변화를 확인합니다.',
     component: WeatherWatchDashboard,
     view: WeatherWatchHandsOnView,
+  },
+  {
+    day: 3,
+    slug: 'weather-component-separation',
+    title: '컴포넌트로 분리한 날씨 대시보드',
+    description: 'Props, Emits, Slot을 사용해 날씨 대시보드를 컴포넌트로 분리합니다.',
+    component: WeatherParent,
+    view: WeatherComponentHandsOnView,
   },
 ]

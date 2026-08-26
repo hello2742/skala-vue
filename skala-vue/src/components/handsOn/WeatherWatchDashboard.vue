@@ -61,8 +61,8 @@ const {
         v-for="city in displayWeatherList"
         :key="city.id"
         :city="city"
-        @select="selectCity"
-        @show-detail="showDetail"
+        @select-card="selectCity"
+        @click-detail="showDetail"
       />
     </div>
 

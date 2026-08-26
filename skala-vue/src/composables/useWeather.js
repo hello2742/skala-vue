@@ -20,13 +20,13 @@ export function useWeather() {
   }
 
   // [요구사항 4] 날씨 카드를 클릭했을 때 상태바 문구를 변경합니다.
-  const selectCity = (cityName) => {
-    selectedMessage.value = `${cityName}이 선택되었습니다.`
+  const selectCity = (city) => {
+    selectedMessage.value = `${city.name}이 선택되었습니다.`
   }
 
   // [요구사항 4] 상세보기 버튼을 눌렀을 때 현재 날씨를 알립니다.
-  const showDetail = (cityName, status) => {
-    window.alert(`${cityName}의 현재 날씨는 [${status}] 상태입니다.`)
+  const showDetail = (city) => {
+    window.alert(`${city.name}의 현재 날씨는 [${city.status}] 상태입니다.`)
   }
 
   return {

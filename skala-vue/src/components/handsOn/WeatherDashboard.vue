@@ -31,8 +31,8 @@ const { searchKeyword, selectedMessage, filteredWeatherList, searchCity, selectC
         v-for="city in filteredWeatherList"
         :key="city.id"
         :city="city"
-        @select="selectCity"
-        @show-detail="showDetail"
+        @select-card="selectCity"
+        @click-detail="showDetail"
       />
     </div>
     <p v-else class="no-result">검색 결과가 없습니다.</p>
