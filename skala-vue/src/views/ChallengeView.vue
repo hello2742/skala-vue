@@ -4,12 +4,21 @@ import { RouterLink, useRoute } from 'vue-router'
 
 const route = useRoute()
 const challenge = computed(() => route.meta.challenge)
-const challengeComponents = computed(() => {
-  if (challenge.value?.components) {
-    return challenge.value.components
+const challengeSections = computed(() => {
+  if (challenge.value?.sections) {
+    return challenge.value.sections
   }
 
-  return challenge.value?.component ? [challenge.value.component] : []
+  if (challenge.value?.components) {
+    return challenge.value.components.map((component, index) => ({
+      title: `실습 ${index + 1}`,
+      component,
+    }))
+  }
+
+  return challenge.value?.component
+    ? [{ title: challenge.value.title, component: challenge.value.component }]
+    : []
 })
 </script>
 
@@ -25,11 +34,14 @@ const challengeComponents = computed(() => {
     </div>
 
     <section class="challenge-panel">
-      <component
-        v-for="(challengeComponent, index) in challengeComponents"
-        :key="`${challenge.slug}-${index}`"
-        :is="challengeComponent"
-      />
+      <article v-for="(section, index) in challengeSections" :key="`${challenge.slug}-${index}`" class="challenge-section">
+        <header class="challenge-section-heading">
+          <span class="challenge-section-number">EXERCISE {{ String(index + 1).padStart(2, '0') }}</span>
+          <h2>{{ section.title }}</h2>
+          <p v-if="section.description">{{ section.description }}</p>
+        </header>
+        <component :is="section.component" />
+      </article>
     </section>
   </main>
 
