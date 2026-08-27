@@ -1,13 +1,21 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { weatherMockData } from '../data/weatherMock'
+import { useWeatherApi } from '../composables/useWeatherApi'
+import { cityCatalog } from '../data/cityCatalog'
 
-const hottestCity = computed(() => [...weatherMockData].sort((firstCity, secondCity) => secondCity.temp - firstCity.temp)[0])
-const bestAirCity = computed(() => weatherMockData.find((city) => city.airQuality === '매우 좋음') ?? weatherMockData[0])
+const weatherList = ref([])
+const { isLoading, errorMessage, fetchWeatherList } = useWeatherApi()
+const hottestCity = computed(() => [...weatherList.value].sort((firstCity, secondCity) => secondCity.temp - firstCity.temp)[0])
+const bestAirCity = computed(() => weatherList.value.find((city) => city.airQuality === '좋음') ?? weatherList.value[0])
 const averageTemperature = computed(() => {
-  const total = weatherMockData.reduce((sum, city) => sum + city.temp, 0)
-  return Math.round((total / weatherMockData.length) * 10) / 10
+  if (!weatherList.value.length) return 0
+  const total = weatherList.value.reduce((sum, city) => sum + city.temp, 0)
+  return Math.round((total / weatherList.value.length) * 10) / 10
+})
+
+onMounted(async () => {
+  weatherList.value = await fetchWeatherList(cityCatalog)
 })
 </script>
 
@@ -16,10 +24,15 @@ const averageTemperature = computed(() => {
     <header class="insights-header">
       <p class="eyebrow">WEATHER INSIGHTS</p>
       <h1>오늘의 날씨 인사이트</h1>
-      <p>목업 데이터를 computed로 가공해 만든 추가 View입니다.</p>
+      <p>실시간 날씨 데이터를 computed로 가공해 만든 추가 View입니다.</p>
     </header>
 
-    <section class="insight-grid">
+    <p v-if="isLoading" class="insight-message">실시간 데이터를 불러오는 중입니다...</p>
+    <el-alert v-else-if="errorMessage" class="insight-message" type="warning" :closable="false" show-icon>
+      {{ errorMessage }}
+    </el-alert>
+
+    <section v-if="weatherList.length" class="insight-grid">
       <article class="insight-card">
         <span>평균 기온</span>
         <strong>{{ averageTemperature }}°</strong>
@@ -34,6 +47,8 @@ const averageTemperature = computed(() => {
         <small>{{ bestAirCity.airQuality }}</small>
       </article>
     </section>
+
+    <p v-else-if="!isLoading" class="insight-message">실시간 인사이트 데이터를 불러오지 못했습니다.</p>
 
     <RouterLink class="insights-link" to="/">메인 대시보드로 돌아가기</RouterLink>
   </main>

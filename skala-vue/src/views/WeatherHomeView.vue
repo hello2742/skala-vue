@@ -5,10 +5,10 @@ import BaseDashboardCard from '../components/exercise/BaseDashboardCard.vue'
 import SearchBar from '../components/exercise/SearchBar.vue'
 import WeatherCard from '../components/exercise/WeatherCard.vue'
 import { useWeatherApi } from '../composables/useWeatherApi'
-import { weatherMockData } from '../data/weatherMock'
+import { cityCatalog } from '../data/cityCatalog'
 
 const router = useRouter()
-const weatherList = ref(weatherMockData.map((city) => ({ ...city })))
+const weatherList = ref([])
 const searchQuery = ref('')
 const selectedCityInfo = ref(null)
 const { isLoading, errorMessage, fetchWeatherList } = useWeatherApi()
@@ -44,7 +44,7 @@ watchEffect(() => {
 
 // [과제 요구사항 1] OpenWeatherMap API에서 지역별 실시간 날씨를 가져옵니다.
 onMounted(async () => {
-  weatherList.value = await fetchWeatherList(weatherList.value)
+  weatherList.value = await fetchWeatherList(cityCatalog)
 })
 </script>
 
@@ -63,7 +63,7 @@ onMounted(async () => {
       {{ selectedMessage }}
     </div>
 
-    <BaseDashboardCard title="지역별 날씨 현황">
+    <BaseDashboardCard title="지역별 날씨 현황" :loading="isLoading">
       <template #header-actions>
         <div class="weather-card-actions">
           <div class="home-highlight">
@@ -74,10 +74,9 @@ onMounted(async () => {
         </div>
       </template>
 
-      <p v-if="isLoading" class="weather-api-message" aria-live="polite">실시간 날씨를 불러오는 중입니다...</p>
-      <p v-else-if="errorMessage" class="weather-api-message weather-api-warning" aria-live="polite">
-        {{ errorMessage }} Mock 데이터를 표시합니다.
-      </p>
+      <el-alert v-if="errorMessage" class="weather-api-alert" type="warning" :closable="false" show-icon>
+        {{ errorMessage }}
+      </el-alert>
 
       <div v-if="filteredWeatherList.length" class="weather-home-grid">
         <WeatherCard
@@ -88,7 +87,9 @@ onMounted(async () => {
           @click-detail="clickDetail"
         />
       </div>
-      <p v-else class="weather-home-empty">검색 결과와 일치하는 도시가 없습니다.</p>
+      <p v-else-if="!isLoading" class="weather-home-empty">
+        {{ errorMessage ? '실시간 날씨 데이터를 불러오지 못했습니다.' : '검색 결과와 일치하는 도시가 없습니다.' }}
+      </p>
     </BaseDashboardCard>
   </main>
 </template>

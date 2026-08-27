@@ -8,6 +8,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
@@ -20,7 +24,9 @@ const props = defineProps({
       </div>
       <slot name="header-actions"></slot>
     </div>
-    <slot></slot>
+    <div class="dashboard-card-body" v-loading="props.loading">
+      <slot></slot>
+    </div>
   </section>
 </template>
 

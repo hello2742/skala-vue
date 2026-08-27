@@ -1,4 +1,7 @@
 <script setup>
+import { ref, watch } from 'vue'
+import { Search } from '@element-plus/icons-vue'
+
 const props = defineProps({
   searchQuery: {
     type: String,
@@ -7,49 +10,77 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update-query'])
+const formRef = ref()
+const formModel = ref({ query: props.searchQuery })
 
-const updateQuery = (event) => {
-  emit('update-query', event.target.value)
+const rules = {
+  query: [
+    {
+      validator: (_rule, value, callback) => {
+        const query = value.trim()
+        if (!query || /^[가-힣\s]+$/.test(query)) {
+          callback()
+          return
+        }
+        callback(new Error('한글 도시명만 입력해 주세요.'))
+      },
+      trigger: ['blur', 'change'],
+    },
+  ],
+}
+
+watch(
+  () => props.searchQuery,
+  (query) => {
+    formModel.value.query = query
+  },
+)
+
+const isValidQuery = (value) => {
+  const query = value.trim()
+  return !query || /^[가-힣\s]+$/.test(query)
+}
+
+const validateQuery = (value) => {
+  formModel.value.query = value
+  formRef.value.validateField('query').catch(() => {})
+
+  // 검증 UI와 로컬 필터링을 분리해 입력 즉시 검색 결과를 갱신합니다.
+  if (isValidQuery(value)) emit('update-query', value.trim())
 }
 </script>
 
 <template>
-  <label class="search-bar">
-    <span class="sr-only">도시 검색</span>
-    <span aria-hidden="true">⌕</span>
-    <input :value="props.searchQuery" type="text" placeholder="도시 이름 검색" @input="updateQuery" />
-  </label>
+  <el-form ref="formRef" class="search-bar" :model="formModel" :rules="rules">
+    <el-form-item prop="query">
+      <el-input
+        v-model="formModel.query"
+        :prefix-icon="Search"
+        type="text"
+        maxlength="10"
+        clearable
+        placeholder="도시 이름 검색"
+        @input="validateQuery"
+      />
+    </el-form-item>
+  </el-form>
 </template>
 
 <style scoped>
 .search-bar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid #cfdee5;
-  border-radius: 0.65rem;
-  color: #78909c;
-  background: white;
+  gap: 0.35rem;
 }
 
-.search-bar input {
+.search-bar :deep(.el-form-item) {
   width: 100%;
-  border: 0;
-  outline: 0;
-  color: #153047;
-  background: transparent;
-  font-size: 0.85rem;
+  margin-bottom: 0;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+.search-bar :deep(.el-input__wrapper) {
+  border-radius: 0.65rem;
+  box-shadow: 0 0 0 1px #cfdee5 inset;
 }
+
 </style>

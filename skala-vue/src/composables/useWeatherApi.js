@@ -10,9 +10,9 @@ const toWeatherItem = (city, weather, airQuality, externalAirQuality) => ({
   ...city,
   temp: Math.round(weather.main.temp),
   feelsLike: Math.round(weather.main.feels_like),
-  status: weather.weather?.[0]?.description ?? city.status,
+  status: weather.weather?.[0]?.description ?? '정보 없음',
   humidity: weather.main.humidity,
-  wind: Math.round((weather.wind?.speed ?? city.wind) * 10) / 10,
+  wind: Math.round((weather.wind?.speed ?? 0) * 10) / 10,
   emoji: city.emoji,
   airQuality:
     externalAirQuality?.current?.european_aqi != null
@@ -46,7 +46,7 @@ export function useWeatherApi() {
       return await Promise.all(cities.map(fetchCityWeather))
     } catch (error) {
       errorMessage.value = error.message || '실시간 날씨를 불러오지 못했습니다.'
-      return cities.map((city) => ({ ...city, isLive: false }))
+      return []
     } finally {
       isLoading.value = false
     }
@@ -60,7 +60,7 @@ export function useWeatherApi() {
       return await fetchCityWeather(city)
     } catch (error) {
       errorMessage.value = error.message || '실시간 날씨를 불러오지 못했습니다.'
-      return { ...city, isLive: false }
+      return null
     } finally {
       isLoading.value = false
     }

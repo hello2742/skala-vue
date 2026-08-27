@@ -2,20 +2,21 @@
 import { onMounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useWeatherApi } from '../composables/useWeatherApi'
-import { weatherMockData } from '../data/weatherMock'
+import { cityCatalog } from '../data/cityCatalog'
 import { useTemperature } from '../composables/useTemperature'
 
 const route = useRoute()
 const cityInfo = ref(null)
+const cityMeta = ref(null)
 const { displayTemp, unitSymbol } = useTemperature(() => cityInfo.value?.temp ?? 0)
 const { isLoading, errorMessage, fetchWeatherDetail } = useWeatherApi()
 
-// [요구사항] Mount 시점에 동적 경로의 cityId로 Mock Data에서 도시를 선택합니다.
+// [요구사항] Mount 시점에 동적 경로의 cityId로 도시 좌표 Catalog를 선택합니다.
 onMounted(() => {
-  const city = weatherMockData.find((item) => item.id === route.params.cityId) ?? null
+  const city = cityCatalog.find((item) => item.id === route.params.cityId) ?? null
+  cityMeta.value = city
 
   if (city) {
-    cityInfo.value = city
     fetchWeatherDetail(city).then((liveCity) => {
       cityInfo.value = liveCity
     })
@@ -43,7 +44,7 @@ onMounted(() => {
       </div>
 
       <p v-if="isLoading" class="detail-api-message">실시간 관측 데이터를 불러오는 중입니다...</p>
-      <p v-else-if="errorMessage" class="detail-api-message">{{ errorMessage }} Mock 데이터를 표시합니다.</p>
+      <el-alert v-else-if="errorMessage" type="warning" :closable="false" show-icon>{{ errorMessage }}</el-alert>
 
       <dl class="detail-stats">
         <div><dt>습도</dt><dd>{{ cityInfo.humidity }}%</dd></div>
@@ -51,6 +52,12 @@ onMounted(() => {
         <div><dt>미세먼지</dt><dd>{{ cityInfo.airQuality }}<small v-if="typeof cityInfo.pm25 === 'number'"> · PM2.5 {{ cityInfo.pm25 }}㎍/㎥</small></dd></div>
         <div><dt>추천 활동</dt><dd>{{ cityInfo.recommendation }}</dd></div>
       </dl>
+    </section>
+
+    <section v-else-if="cityMeta" class="detail-card detail-not-found">
+      <h1>{{ cityMeta.name }} 날씨 정보를 불러오지 못했습니다.</h1>
+      <p v-if="isLoading">실시간 관측 데이터를 불러오는 중입니다...</p>
+      <p v-else>{{ errorMessage }}</p>
     </section>
 
     <section v-else class="detail-card detail-not-found">

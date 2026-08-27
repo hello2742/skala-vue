@@ -118,20 +118,20 @@ Slot으로 자식 컴포넌트를 공통 카드 안에 주입하면서도 실제
 - OpenWeatherMap 현재 날씨 API로 도시별 실시간 기온, 상태, 습도, 풍속, 체감온도를 조회합니다.
 - OpenWeatherMap 공기질 API를 추가해 도시별 대기질 정보를 표시합니다.
 - Open-Meteo 대기질 API도 연동해 PM2.5와 유럽 AQI 데이터를 확장 정보로 활용합니다.
-- `useWeatherApi` Composable에서 로딩·오류 상태와 Mock 데이터 fallback을 관리합니다.
+- `useWeatherApi` Composable에서 로딩·오류 상태를 관리합니다.
 - Axios Request Interceptor에서 OpenWeatherMap API Key를 주입하고, Response Interceptor에서 응답 형식과 오류를 공통 처리합니다.
 - API Key는 `.env`의 `VITE_OPENWEATHER_API_KEY`로 관리하며, `.env.example`을 참고합니다.
-- 기존 도시 좌표 Mock Data를 API 요청 파라미터로 재사용했습니다.
+- 도시 Catalog의 좌표를 API 요청 파라미터로 사용합니다.
 
 ### 느낀 점
 
-Axios를 사용하면서 화면 컴포넌트가 직접 HTTP 요청을 처리하지 않도록 API 서비스와 Composable을 분리했습니다. API Key가 없거나 네트워크 요청이 실패하는 상황도 고려해 기존 Mock 데이터를 fallback으로 유지하니 개발 환경과 실제 연동 환경을 안정적으로 함께 다룰 수 있었습니다.
+Axios를 사용하면서 화면 컴포넌트가 직접 HTTP 요청을 처리하지 않도록 API 서비스와 Composable을 분리했습니다. API Key가 없거나 네트워크 요청이 실패하면 오류 상태를 명확히 표시해 외부 API 의존성을 사용자에게 숨기지 않도록 했습니다.
 
 ### 나만의 독창성 및 강조 포인트
 
 - 현재 날씨 API뿐 아니라 공기질 API까지 함께 호출해 단순 기온 표시를 환경 정보 대시보드로 확장했습니다.
 - 같은 API 조회 로직을 홈과 상세 페이지에서 재사용하도록 구성했습니다.
-- 로딩 상태, 오류 안내, Mock fallback을 추가해 외부 API의 불안정성이 화면 전체로 전파되지 않도록 했습니다.
+- 로딩 상태와 오류 안내를 추가해 외부 API의 현재 상태를 화면에 명확히 전달했습니다.
 
 ### API Key 설정
 
@@ -140,6 +140,30 @@ cp .env.example .env
 ```
 
 이후 `.env`의 `VITE_OPENWEATHER_API_KEY`에 OpenWeatherMap에서 발급받은 키를 입력합니다. `.env` 파일은 Git에 커밋하지 않습니다.
+
+## 핸즈온 07. Element Plus와 입력 검증
+
+### 구현 내용
+
+- Element Plus의 `el-form`, `el-form-item`, `el-input`을 검색 UI에 적용했습니다.
+- 한글 도시명만 허용하고, 공백 입력과 잘못된 형식은 검증 메시지로 안내합니다.
+- `BaseDashboardCard`에 `v-loading`을 적용해 API 요청 중 카드 영역의 상태를 표시합니다.
+- API 오류와 Mock fallback은 `el-alert`로 표시합니다.
+- 기존 카드의 색상·레이아웃은 유지하고, 입력·검증·로딩·오류 처리처럼 UI Library가 필요한 부분만 교체했습니다.
+
+### 느낀 점
+
+검색은 도시 목록이 많아졌을 때 원하는 지역을 빠르게 찾기 위한 기존 핵심 기능입니다. 이번에는 단순히 검색창의 디자인을 바꾸는 데 그치지 않고, 잘못된 입력이 검색 흐름으로 넘어가지 않도록 검증을 추가했습니다. `el-form`과 `el-form-item`을 사용하면서 검증 규칙과 오류 메시지를 일관된 흐름으로 관리할 수 있었습니다.
+
+외부 컴포넌트는 직접 만드는 코드를 줄이는 것보다, 검증 상태·접근성·로딩 상태·사용자 피드백을 표준화하는 데 의미가 있었습니다. `SearchBar`가 입력과 검증을 책임지고 부모 View는 검색 결과와 API 상태에 집중하도록 역할을 분리했습니다.
+
+### 나만의 독창성 및 강조 포인트
+
+- 외부 UI Library를 장식 용도가 아니라 입력값 검증 컴포넌트로 활용했습니다.
+- 한글이 아닌 검색어를 API 요청 전에 차단해 불필요한 요청을 줄였습니다.
+- 사용하는 컴포넌트와 스타일만 개별 등록해 기존 디자인과 번들 크기를 함께 관리했습니다.
+- Element Plus 등록 코드는 `plugins/elementPlus.js`로 분리해 `main.js`가 앱 조립 역할에 집중하도록 했습니다.
+
 
 ## Recommended IDE Setup
 
