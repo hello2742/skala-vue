@@ -1,20 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { challenges } from '../data/challenges'
-import { handsOn } from '../data/handsOn'
-import HandsOnView from '../views/HandsOnView.vue'
 
 const challengeRoutes = challenges.map((challenge) => ({
   path: `/challenges/${challenge.slug}`,
   name: `challenge-${challenge.slug}`,
   component: () => import('../views/ChallengeView.vue'),
   meta: { challenge },
-}))
-
-const handsOnRoutes = handsOn.map((item) => ({
-  path: `/hands-on/${item.slug}`,
-  name: `hands-on-${item.slug}`,
-  component: item.view ?? HandsOnView,
-  meta: { handsOn: item },
 }))
 
 const router = createRouter({
@@ -46,7 +37,6 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     ...challengeRoutes,
-    ...handsOnRoutes,
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',

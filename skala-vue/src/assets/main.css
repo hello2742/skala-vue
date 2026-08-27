@@ -120,10 +120,6 @@ h3 {
   font-size: 0.85rem;
 }
 
-.hands-on-section {
-  margin-bottom: 5rem;
-}
-
 .challenge-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -171,58 +167,6 @@ h3 {
   margin-top: 0.35rem;
   font-size: 1.15rem;
   font-weight: 700;
-}
-
-.hands-on-card {
-  min-height: 220px;
-  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
-  background: linear-gradient(145deg, var(--color-background-soft), color-mix(in srgb, var(--color-accent) 8%, var(--color-background)));
-}
-
-.hands-on-card h3 {
-  margin-top: auto;
-  font-size: 1.4rem;
-}
-
-.hands-on-empty {
-  display: grid;
-  min-height: 220px;
-  place-items: center;
-  align-content: center;
-  padding: 2rem;
-  border: 1px dashed color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
-  border-radius: 1rem;
-  text-align: center;
-}
-
-.empty-mark {
-  display: grid;
-  width: 2.8rem;
-  height: 2.8rem;
-  margin-bottom: 1rem;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--color-accent);
-  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  font-size: 1.8rem;
-}
-
-.hands-on-empty h3 {
-  font-size: 1.1rem;
-}
-
-.hands-on-empty p {
-  margin-top: 0.5rem;
-  color: var(--color-text-muted);
-  font-size: 0.86rem;
-}
-
-.hands-on-empty code {
-  padding: 0.1rem 0.35rem;
-  border-radius: 0.3rem;
-  background: var(--color-background-mute);
-  color: var(--color-heading);
-  font-size: 0.8rem;
 }
 
 .secondary-section {
