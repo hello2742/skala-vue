@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import BaseDashboardCard from '../components/exercise/BaseDashboardCard.vue'
 import SearchBar from '../components/exercise/SearchBar.vue'
@@ -11,7 +11,7 @@ const router = useRouter()
 const weatherList = ref([])
 const searchQuery = ref('')
 const selectedCityInfo = ref(null)
-const { isLoading, errorMessage, fetchWeatherList } = useWeatherApi()
+const { isLoading, errorMessage, fetchWeatherList, cancelRequests } = useWeatherApi()
 
 const filteredWeatherList = computed(() => {
   return weatherList.value.filter((city) => city.name.includes(searchQuery.value))
@@ -46,6 +46,8 @@ watchEffect(() => {
 onMounted(async () => {
   weatherList.value = await fetchWeatherList(cityCatalog)
 })
+
+onUnmounted(cancelRequests)
 </script>
 
 <template>

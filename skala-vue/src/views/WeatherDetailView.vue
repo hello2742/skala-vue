@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useWeatherApi } from '../composables/useWeatherApi'
 import { cityCatalog } from '../data/cityCatalog'
@@ -9,7 +9,7 @@ const route = useRoute()
 const cityInfo = ref(null)
 const cityMeta = ref(null)
 const { displayTemp, unitSymbol } = useTemperature(() => cityInfo.value?.temp ?? 0)
-const { isLoading, errorMessage, fetchWeatherDetail } = useWeatherApi()
+const { isLoading, errorMessage, fetchWeatherDetail, cancelRequests } = useWeatherApi()
 
 // [요구사항] Mount 시점에 동적 경로의 cityId로 도시 좌표 Catalog를 선택합니다.
 onMounted(() => {
@@ -22,6 +22,8 @@ onMounted(() => {
     })
   }
 })
+
+onUnmounted(cancelRequests)
 </script>
 
 <template>

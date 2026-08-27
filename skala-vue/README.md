@@ -120,7 +120,7 @@ Slot으로 자식 컴포넌트를 공통 카드 안에 주입하면서도 실제
 - Open-Meteo 대기질 API도 연동해 PM2.5와 유럽 AQI 데이터를 확장 정보로 활용합니다.
 - `useWeatherApi` Composable에서 로딩·오류 상태를 관리합니다.
 - Axios Request Interceptor에서 OpenWeatherMap API Key를 주입하고, Response Interceptor에서 응답 형식과 오류를 공통 처리합니다.
-- API Key는 `.env`의 `VITE_OPENWEATHER_API_KEY`로 관리하며, `.env.example`을 참고합니다.
+- 개발용 API Key는 `.env.development`의 `VITE_OPENWEATHER_API_KEY`, 프로덕션 Key는 Vercel의 `OPENWEATHER_API_KEY`로 분리합니다.
 - 도시 Catalog의 좌표를 API 요청 파라미터로 사용합니다.
 
 ### 느낀 점
@@ -133,13 +133,19 @@ Axios를 사용하면서 화면 컴포넌트가 직접 HTTP 요청을 처리하�
 - 같은 API 조회 로직을 홈과 상세 페이지에서 재사용하도록 구성했습니다.
 - 로딩 상태와 오류 안내를 추가해 외부 API의 현재 상태를 화면에 명확히 전달했습니다.
 
-### API Key 설정
+### 개발·프로덕션 API Key 설정
 
 ```sh
-cp .env.example .env
+cp .env.development.example .env.development
 ```
 
-이후 `.env`의 `VITE_OPENWEATHER_API_KEY`에 OpenWeatherMap에서 발급받은 키를 입력합니다. `.env` 파일은 Git에 커밋하지 않습니다.
+개발 환경에서는 `.env.development`의 `VITE_OPENWEATHER_API_KEY`에 개발용 Key를 입력합니다. 이 값은 Vite 개발 서버에서만 브라우저가 직접 API를 확인할 때 사용하며, 실제 파일은 Git에 커밋하지 않습니다.
+
+## 배포 준비
+
+프로덕션에서는 `.env.production.example`의 형식처럼 `OPENWEATHER_API_KEY`를 Vercel Project Settings에 등록합니다. 이 값은 Vercel Function만 사용하므로 `VITE_` 접두사를 붙이지 않습니다.
+
+GitHub Pages는 정적 호스팅이라 서버 Secret을 숨길 수 없으므로 최종 배포에는 Vercel을 사용합니다. 일반 개발은 `npm run dev`로, Vercel Function까지 함께 점검할 때는 `vercel dev`를 사용합니다.
 
 ## 핸즈온 07. Element Plus와 입력 검증
 
@@ -148,7 +154,7 @@ cp .env.example .env
 - Element Plus의 `el-form`, `el-form-item`, `el-input`을 검색 UI에 적용했습니다.
 - 한글 도시명만 허용하고, 공백 입력과 잘못된 형식은 검증 메시지로 안내합니다.
 - `BaseDashboardCard`에 `v-loading`을 적용해 API 요청 중 카드 영역의 상태를 표시합니다.
-- API 오류와 Mock fallback은 `el-alert`로 표시합니다.
+- API 오류는 `el-alert`로 표시합니다.
 - 기존 카드의 색상·레이아웃은 유지하고, 입력·검증·로딩·오류 처리처럼 UI Library가 필요한 부분만 교체했습니다.
 
 ### 느낀 점

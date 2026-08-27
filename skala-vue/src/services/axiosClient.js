@@ -1,9 +1,7 @@
 import axios from 'axios'
 
-const OPEN_WEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
-
 // Axios 인스턴스와 공통 통신 규칙만 관리합니다.
-const createApiClient = (baseURL, requiresApiKey = false) => {
+const createApiClient = (baseURL) => {
   const client = axios.create({
     baseURL,
     timeout: 8000,
@@ -12,14 +10,6 @@ const createApiClient = (baseURL, requiresApiKey = false) => {
 
   // Request Interceptor: OpenWeatherMap 요청에 API Key를 자동으로 추가합니다.
   client.interceptors.request.use((config) => {
-    if (requiresApiKey) {
-      if (!OPEN_WEATHER_API_KEY) {
-        return Promise.reject(new Error('VITE_OPENWEATHER_API_KEY가 설정되지 않았습니다.'))
-      }
-
-      config.params = { ...config.params, appid: OPEN_WEATHER_API_KEY }
-    }
-
     return config
   })
 
@@ -39,5 +29,22 @@ const createApiClient = (baseURL, requiresApiKey = false) => {
   return client
 }
 
-export const openWeatherClient = createApiClient('https://api.openweathermap.org/data/2.5', true)
-export const openMeteoClient = createApiClient('https://air-quality-api.open-meteo.com/v1')
+export const weatherApiClient = createApiClient('/api')
+
+// Vite 개발 서버에서는 로컬 개발용 Key로 외부 API를 직접 확인합니다.
+const createDevelopmentWeatherClient = () => {
+  const client = createApiClient('https://api.openweathermap.org/data/2.5')
+
+  client.interceptors.request.use((config) => {
+    const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY
+    if (!apiKey) return Promise.reject(new Error('개발용 OpenWeatherMap API Key가 설정되지 않았습니다.'))
+
+    config.params = { ...config.params, appid: apiKey }
+    return config
+  })
+
+  return client
+}
+
+export const developmentWeatherClient = createDevelopmentWeatherClient()
+export const developmentOpenMeteoClient = createApiClient('https://air-quality-api.open-meteo.com/v1')

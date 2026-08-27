@@ -1,11 +1,11 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useWeatherApi } from '../composables/useWeatherApi'
 import { cityCatalog } from '../data/cityCatalog'
 
 const weatherList = ref([])
-const { isLoading, errorMessage, fetchWeatherList } = useWeatherApi()
+const { isLoading, errorMessage, fetchWeatherList, cancelRequests } = useWeatherApi()
 const hottestCity = computed(() => [...weatherList.value].sort((firstCity, secondCity) => secondCity.temp - firstCity.temp)[0])
 const bestAirCity = computed(() => weatherList.value.find((city) => city.airQuality === '좋음') ?? weatherList.value[0])
 const averageTemperature = computed(() => {
@@ -17,6 +17,8 @@ const averageTemperature = computed(() => {
 onMounted(async () => {
   weatherList.value = await fetchWeatherList(cityCatalog)
 })
+
+onUnmounted(cancelRequests)
 </script>
 
 <template>
