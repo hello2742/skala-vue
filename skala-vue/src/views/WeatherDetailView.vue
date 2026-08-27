@@ -1,16 +1,25 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { useWeatherApi } from '../composables/useWeatherApi'
 import { weatherMockData } from '../data/weatherMock'
 import { useTemperature } from '../composables/useTemperature'
 
 const route = useRoute()
 const cityInfo = ref(null)
 const { displayTemp, unitSymbol } = useTemperature(() => cityInfo.value?.temp ?? 0)
+const { isLoading, errorMessage, fetchWeatherDetail } = useWeatherApi()
 
 // [요구사항] Mount 시점에 동적 경로의 cityId로 Mock Data에서 도시를 선택합니다.
 onMounted(() => {
-  cityInfo.value = weatherMockData.find((city) => city.id === route.params.cityId) ?? null
+  const city = weatherMockData.find((item) => item.id === route.params.cityId) ?? null
+
+  if (city) {
+    cityInfo.value = city
+    fetchWeatherDetail(city).then((liveCity) => {
+      cityInfo.value = liveCity
+    })
+  }
 })
 </script>
 
@@ -33,10 +42,13 @@ onMounted(() => {
         <span>체감 {{ cityInfo.feelsLike }}{{ unitSymbol }}</span>
       </div>
 
+      <p v-if="isLoading" class="detail-api-message">실시간 관측 데이터를 불러오는 중입니다...</p>
+      <p v-else-if="errorMessage" class="detail-api-message">{{ errorMessage }} Mock 데이터를 표시합니다.</p>
+
       <dl class="detail-stats">
         <div><dt>습도</dt><dd>{{ cityInfo.humidity }}%</dd></div>
         <div><dt>풍속</dt><dd>{{ cityInfo.wind }}m/s</dd></div>
-        <div><dt>미세먼지</dt><dd>{{ cityInfo.airQuality }}</dd></div>
+        <div><dt>미세먼지</dt><dd>{{ cityInfo.airQuality }}<small v-if="typeof cityInfo.pm25 === 'number'"> · PM2.5 {{ cityInfo.pm25 }}㎍/㎥</small></dd></div>
         <div><dt>추천 활동</dt><dd>{{ cityInfo.recommendation }}</dd></div>
       </dl>
     </section>
@@ -112,6 +124,13 @@ onMounted(() => {
 
 .detail-temperature span {
   color: #bcecff;
+}
+
+.detail-api-message {
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+  color: #bcecff;
+  font-size: 0.82rem;
 }
 
 .detail-stats {

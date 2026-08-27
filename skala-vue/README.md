@@ -111,6 +111,36 @@ Slot으로 자식 컴포넌트를 공통 카드 안에 주입하면서도 실제
 - 단위 이름과 기호를 함께 제공해 사용자가 현재 설정을 쉽게 확인할 수 있도록 했습니다.
 - 향후 풍속·강수량 등 다른 단위 설정도 `configStore`에 확장할 수 있는 구조로 만들었습니다.
 
+## 핸즈온 06. Axios와 외부 날씨 API
+
+### 구현 내용
+
+- OpenWeatherMap 현재 날씨 API로 도시별 실시간 기온, 상태, 습도, 풍속, 체감온도를 조회합니다.
+- OpenWeatherMap 공기질 API를 추가해 도시별 대기질 정보를 표시합니다.
+- Open-Meteo 대기질 API도 연동해 PM2.5와 유럽 AQI 데이터를 확장 정보로 활용합니다.
+- `useWeatherApi` Composable에서 로딩·오류 상태와 Mock 데이터 fallback을 관리합니다.
+- Axios Request Interceptor에서 OpenWeatherMap API Key를 주입하고, Response Interceptor에서 응답 형식과 오류를 공통 처리합니다.
+- API Key는 `.env`의 `VITE_OPENWEATHER_API_KEY`로 관리하며, `.env.example`을 참고합니다.
+- 기존 도시 좌표 Mock Data를 API 요청 파라미터로 재사용했습니다.
+
+### 느낀 점
+
+Axios를 사용하면서 화면 컴포넌트가 직접 HTTP 요청을 처리하지 않도록 API 서비스와 Composable을 분리했습니다. API Key가 없거나 네트워크 요청이 실패하는 상황도 고려해 기존 Mock 데이터를 fallback으로 유지하니 개발 환경과 실제 연동 환경을 안정적으로 함께 다룰 수 있었습니다.
+
+### 나만의 독창성 및 강조 포인트
+
+- 현재 날씨 API뿐 아니라 공기질 API까지 함께 호출해 단순 기온 표시를 환경 정보 대시보드로 확장했습니다.
+- 같은 API 조회 로직을 홈과 상세 페이지에서 재사용하도록 구성했습니다.
+- 로딩 상태, 오류 안내, Mock fallback을 추가해 외부 API의 불안정성이 화면 전체로 전파되지 않도록 했습니다.
+
+### API Key 설정
+
+```sh
+cp .env.example .env
+```
+
+이후 `.env`의 `VITE_OPENWEATHER_API_KEY`에 OpenWeatherMap에서 발급받은 키를 입력합니다. `.env` 파일은 Git에 커밋하지 않습니다.
+
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).

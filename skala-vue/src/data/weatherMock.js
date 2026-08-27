@@ -5,6 +5,8 @@ export const weatherMockData = [
   {
     id: 'city_01',
     name: '서울',
+    lat: 37.5665,
+    lon: 126.978,
     temp: 28,
     status: '맑음',
     humidity: 55,
@@ -17,6 +19,8 @@ export const weatherMockData = [
   {
     id: 'city_02',
     name: '수원',
+    lat: 37.2636,
+    lon: 127.0286,
     temp: 24,
     status: '비',
     humidity: 78,
@@ -29,6 +33,8 @@ export const weatherMockData = [
   {
     id: 'city_03',
     name: '부산',
+    lat: 35.1796,
+    lon: 129.0756,
     temp: 26,
     status: '구름',
     humidity: 68,
@@ -41,6 +47,8 @@ export const weatherMockData = [
   {
     id: 'city_04',
     name: '제주',
+    lat: 33.4996,
+    lon: 126.5312,
     temp: 30,
     status: '맑음',
     humidity: 62,

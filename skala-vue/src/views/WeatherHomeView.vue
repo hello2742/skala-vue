@@ -1,15 +1,17 @@
 <script setup>
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import BaseDashboardCard from '../components/exercise/BaseDashboardCard.vue'
 import SearchBar from '../components/exercise/SearchBar.vue'
 import WeatherCard from '../components/exercise/WeatherCard.vue'
+import { useWeatherApi } from '../composables/useWeatherApi'
 import { weatherMockData } from '../data/weatherMock'
 
 const router = useRouter()
 const weatherList = ref(weatherMockData.map((city) => ({ ...city })))
 const searchQuery = ref('')
 const selectedCityInfo = ref(null)
+const { isLoading, errorMessage, fetchWeatherList } = useWeatherApi()
 
 const filteredWeatherList = computed(() => {
   return weatherList.value.filter((city) => city.name.includes(searchQuery.value))
@@ -39,6 +41,11 @@ watch(selectedCityInfo, (newCity) => {
 watchEffect(() => {
   console.log('[watchEffect] 검색어:', searchQuery.value)
 })
+
+// [과제 요구사항 1] OpenWeatherMap API에서 지역별 실시간 날씨를 가져옵니다.
+onMounted(async () => {
+  weatherList.value = await fetchWeatherList(weatherList.value)
+})
 </script>
 
 <template>
@@ -66,6 +73,11 @@ watchEffect(() => {
           <SearchBar :search-query="searchQuery" @update-query="updateQuery" />
         </div>
       </template>
+
+      <p v-if="isLoading" class="weather-api-message" aria-live="polite">실시간 날씨를 불러오는 중입니다...</p>
+      <p v-else-if="errorMessage" class="weather-api-message weather-api-warning" aria-live="polite">
+        {{ errorMessage }} Mock 데이터를 표시합니다.
+      </p>
 
       <div v-if="filteredWeatherList.length" class="weather-home-grid">
         <WeatherCard
@@ -175,6 +187,16 @@ watchEffect(() => {
   padding: 3rem 0;
   color: var(--color-text-muted);
   text-align: center;
+}
+
+.weather-api-message {
+  margin-bottom: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.weather-api-warning {
+  color: #a35d24;
 }
 
 @media (max-width: 950px) {
