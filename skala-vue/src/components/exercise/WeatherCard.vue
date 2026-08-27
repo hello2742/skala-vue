@@ -1,4 +1,6 @@
 <script setup>
+import { useTemperature } from '../../composables/useTemperature'
+
 const props = defineProps({
   city: {
     type: Object,
@@ -7,6 +9,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['select-card', 'click-detail'])
+const { displayTemp, unitSymbol } = useTemperature(() => props.city.temp)
 </script>
 
 <template>
@@ -17,7 +20,7 @@ const emit = defineEmits(['select-card', 'click-detail'])
     </div>
 
     <div class="weather-temperature">
-      <strong>{{ props.city.temp }}°</strong>
+      <strong>{{ displayTemp }}{{ unitSymbol }}</strong>
       <span>{{ props.city.status }}</span>
     </div>
 

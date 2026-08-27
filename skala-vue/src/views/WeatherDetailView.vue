@@ -2,9 +2,11 @@
 import { onMounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { weatherMockData } from '../data/weatherMock'
+import { useTemperature } from '../composables/useTemperature'
 
 const route = useRoute()
 const cityInfo = ref(null)
+const { displayTemp, unitSymbol } = useTemperature(() => cityInfo.value?.temp ?? 0)
 
 // [요구사항] Mount 시점에 동적 경로의 cityId로 Mock Data에서 도시를 선택합니다.
 onMounted(() => {
@@ -27,8 +29,8 @@ onMounted(() => {
       </div>
 
       <div class="detail-temperature">
-        <strong>{{ cityInfo.temp }}°</strong>
-        <span>체감 {{ cityInfo.feelsLike }}°</span>
+        <strong>{{ displayTemp }}{{ unitSymbol }}</strong>
+        <span>체감 {{ cityInfo.feelsLike }}{{ unitSymbol }}</span>
       </div>
 
       <dl class="detail-stats">
