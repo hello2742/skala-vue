@@ -133,20 +133,6 @@ Axios를 사용하면서 화면 컴포넌트가 직접 HTTP 요청을 처리하�
 - 같은 API 조회 로직을 홈과 상세 페이지에서 재사용하도록 구성했습니다.
 - 로딩 상태와 오류 안내를 추가해 외부 API의 현재 상태를 화면에 명확히 전달했습니다.
 
-### 개발·프로덕션 API Key 설정
-
-```sh
-cp .env.development.example .env.development
-```
-
-개발 환경에서는 `.env.development`의 `VITE_OPENWEATHER_API_KEY`에 개발용 Key를 입력합니다. 이 값은 Vite 개발 서버에서만 브라우저가 직접 API를 확인할 때 사용하며, 실제 파일은 Git에 커밋하지 않습니다.
-
-## 배포 준비
-
-프로덕션에서는 `.env.production.example`의 형식처럼 `OPENWEATHER_API_KEY`를 Vercel Project Settings에 등록합니다. 이 값은 Vercel Function만 사용하므로 `VITE_` 접두사를 붙이지 않습니다.
-
-GitHub Pages는 정적 호스팅이라 서버 Secret을 숨길 수 없으므로 최종 배포에는 Vercel을 사용합니다. 일반 개발은 `npm run dev`로, Vercel Function까지 함께 점검할 때는 `vercel dev`를 사용합니다.
-
 ## 핸즈온 07. Element Plus와 입력 검증
 
 ### 구현 내용
@@ -170,6 +156,14 @@ GitHub Pages는 정적 호스팅이라 서버 Secret을 숨길 수 없으므로 
 - 사용하는 컴포넌트와 스타일만 개별 등록해 기존 디자인과 번들 크기를 함께 관리했습니다.
 - Element Plus 등록 코드는 `plugins/elementPlus.js`로 분리해 `main.js`가 앱 조립 역할에 집중하도록 했습니다.
 
+
+- **책임 분리**: 화면과 재사용 UI는 `views`, `components`로, 상태·비즈니스 로직은 `composables`, 외부 통신은 `services`, 공통 데이터와 유틸리티는 `data`, `utils`로 분리했습니다. 따라서 UI 변경이 API 호출 로직에, 통신 방식 변경이 화면 컴포넌트에 직접 영향을 주지 않도록 했습니다.
+- **API 키 보호와 배포 구조**: 개발 환경에서는 `.env.development`의 키로 API를 확인하고, 프로덕션에서는 Vercel Function(`/api/weather`)이 외부 API를 호출합니다. 프로덕션 키는 서버 환경 변수(`OPENWEATHER_API_KEY`)로만 관리해 브라우저 번들에 노출하지 않습니다.
+- **호출 비용과 응답 성능 최적화**: 클라이언트 Composable과 Vercel Function에 각각 10분 TTL 캐시를 두고, 동일 도시의 진행 중인 요청은 `pendingRequests`로 하나의 Promise를 공유합니다. 같은 데이터를 반복 조회할 때 불필요한 외부 API 호출을 줄입니다.
+- **요청 생명주기 관리**: 화면이 전환되거나 다시 요청할 때 `AbortController`로 이전 요청을 취소하고, `onUnmounted`에서 정리합니다. 더 이상 필요하지 않은 응답이 화면 상태를 갱신하는 일을 방지합니다.
+- **외부 API 장애 대응**: 날씨·대기질 API를 `Promise.allSettled`로 병렬 요청합니다. 핵심 날씨 API가 성공하면 보조 대기질 API 일부가 실패해도 가능한 정보를 제공하며, 실패 상태는 사용자에게 명확히 안내합니다.
+- **입력·접근·예외 상태 처리**: 검색 입력값을 검증하고, 로딩·오류·검색 결과 없음·존재하지 않는 URL(404)을 각각 화면으로 처리했습니다. 서버 Function은 허용 도시 ID만 처리하고, 요청 횟수를 제한해 기본적인 오용 방어도 적용했습니다.
+- **전송량과 소스 관리**: 주요 View는 라우트 레이지 로딩으로 필요한 시점에 불러오며, `.env` 파일과 빌드 결과물은 Git 추적에서 제외합니다. 비밀 값과 생성 산출물이 저장소에 섞이지 않도록 했습니다.
 
 ## Recommended IDE Setup
 
