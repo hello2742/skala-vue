@@ -44,7 +44,7 @@ const toEuropeanAirQualityLabel = (aqi) => {
 }
 
 const fetchCityWeather = async (city) => {
-  if (!OPEN_WEATHER_API_KEY) throw new Error('weather configuration is unavailable')
+  if (!OPEN_WEATHER_API_KEY) throw new Error('OPENWEATHER_API_KEY is missing')
 
   const [weatherResult, airQualityResult, externalAirQualityResult] = await Promise.allSettled([
     axios.get('https://api.openweathermap.org/data/2.5/weather', {
@@ -58,7 +58,10 @@ const fetchCityWeather = async (city) => {
     }),
   ])
 
-  if (weatherResult.status === 'rejected') throw new Error('weather request failed')
+  if (weatherResult.status === 'rejected') {
+    const status = weatherResult.reason?.response?.status ?? 'unknown'
+    throw new Error(`OpenWeatherMap request failed with status ${status}`)
+  }
 
   const weather = weatherResult.value.data
   const airQuality = airQualityResult.status === 'fulfilled' ? airQualityResult.value.data : null
@@ -97,7 +100,12 @@ export default async function handler(req, res) {
     cache.set(city.id, { createdAt: Date.now(), data })
     res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=60')
     return res.status(200).json(data)
-  } catch {
+  } catch (error) {
+    // Key 값과 외부 응답 본문은 기록하지 않고, 배포 로그에서 원인만 확인합니다.
+    console.error('Weather API failed', {
+      cityId: city.id,
+      reason: error.message,
+    })
     return res.status(502).json({ message: '날씨 정보를 불러오지 못했습니다.' })
   }
 }
